@@ -1,25 +1,29 @@
+// useFetch.ts
 import { useEffect, useState } from "react";
 
-// ✅ 添加泛型 T，使 useFetch 可以返回指定类型的数据
-function useFetch<T = unknown>(url: string) {
-  const [data, setData] = useState<T | null>(null);
+const useFetch = (url: string) => {
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(url)
-      .then((response) => response.json())
-      .then((json) => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url); // ✅ 在 Node.js 运行 Jest 需要 mock fetch
+        if (!response.ok) throw new Error("Failed to fetch");
+        const json = await response.json();
         setData(json);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
         setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, [url]);
 
   return { data, loading, error };
-}
+};
 
 export default useFetch;
