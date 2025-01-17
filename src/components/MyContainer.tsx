@@ -4,17 +4,19 @@ import useFetch from "../hooks/useFetch";
 
 const API_URL = "https://jsonplaceholder.typicode.com/todos";
 
+// ✅ 定义数据结构，确保 fetchedData 是正确的类型
 type Item = { id: string; text: string };
+type FetchedItem = { id: number; title: string };
 
 const MyContainer: React.FC = () => {
-  const { data: fetchedData, loading, error } = useFetch(API_URL);
+  const { data: fetchedData, loading, error } = useFetch<FetchedItem[]>(API_URL);
   const [userItems, setUserItems] = useState<Item[]>([]);
   const [inputValue, setInputValue] = useState("");
 
-  // ✅ 确保 fetchedData 转换为符合 MyList 需求的格式
+  // ✅ 确保 fetchedData 不是 string[]
   const items: Item[] = Array.isArray(fetchedData)
     ? fetchedData.map((item) => ({
-        id: item.id.toString(), // 确保 `id` 是字符串
+        id: item.id.toString(), // 转换 id 为字符串
         text: item.title || "Untitled", // 避免 undefined
       }))
     : [];
@@ -56,7 +58,6 @@ const MyContainer: React.FC = () => {
       ) : (
         <>
           <h3 className="text-lg font-semibold mt-4 text-gray-700">Fetched Items</h3>
-          {/* ✅ 确保 items 传递的是对象数组 */}
           <MyList items={items} onDelete={() => {}} />
 
           <h3 className="text-lg font-semibold mt-4 text-gray-700">User Added Items</h3>
