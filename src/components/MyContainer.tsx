@@ -7,21 +7,21 @@ const API_URL = "https://jsonplaceholder.typicode.com/todos";
 const MyContainer: React.FC = () => {
   const { data: items, loading, error } = useFetch(API_URL);
   const [newItem, setNewItem] = useState("");
-  const [userItems, setUserItems] = useState<string[]>([]);
+  const [userItems, setUserItems] = useState<{ id: string; text: string }[]>([]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewItem(event.target.value);
   };
 
   const handleAddItem = () => {
-    if (newItem.trim() !== "" && !userItems.includes(newItem)) {
-      setUserItems([...userItems, newItem]);
+    if (newItem.trim() !== "") {
+      setUserItems([...userItems, { id: Date.now().toString(), text: newItem }]);
       setNewItem("");
     }
   };
 
-  const handleDeleteItem = (itemToDelete: string) => {
-    setUserItems(userItems.filter((item) => item !== itemToDelete));
+  const handleDeleteItem = (id: string) => {
+    setUserItems(userItems.filter((item) => item.id !== id));
   };
 
   return (
@@ -41,10 +41,12 @@ const MyContainer: React.FC = () => {
               value={newItem}
               onChange={handleInputChange}
               className="flex-1 p-2 border rounded-lg"
+              role="textbox"
             />
             <button
               onClick={handleAddItem}
               className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+              role="button"
             >
               Add Item
             </button>
