@@ -1,8 +1,8 @@
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
+  testResultsProcessor: "jest-junit", // 让 Jest 生成 junit.xml
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1"
-  },
-  moduleDirectories: ["node_modules", "src"]
+    "\\.(css|less|sass|scss)$": "identity-obj-proxy" // 让 Jest 忽略 CSS
+  }
 };
