@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-// ✅ 使用泛型 T 让 useFetch 返回正确的类型
-function useFetch<T>(url: string) {
+// ✅ 添加泛型 T，使 useFetch 可以返回指定类型的数据
+function useFetch<T = unknown>(url: string) {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
