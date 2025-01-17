@@ -1,15 +1,14 @@
-// useFetch.ts
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
-const useFetch = (url: string) => {
-  const [data, setData] = useState(null);
+const useFetch = <T,>(url: string) => {
+  const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(url); // ✅ 在 Node.js 运行 Jest 需要 mock fetch
+        const response = await fetch(url);
         if (!response.ok) throw new Error("Failed to fetch");
         const json = await response.json();
         setData(json);
