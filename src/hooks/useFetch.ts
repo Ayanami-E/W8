@@ -1,31 +1,25 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const useFetch = (url: string) => {
-  const [data, setData] = useState<string[]>([]);
+// ✅ 使用泛型 T 让 useFetch 返回正确的类型
+function useFetch<T>(url: string) {
+  const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Failed to fetch data");
-        const result = await response.json();
-
-        // 仅取前 5 项任务并提取 title
-        const taskTitles = result.slice(0, 5).map((task: { title: string }) => task.title);
-        setData(taskTitles);
+    fetch(url)
+      .then((response) => response.json())
+      .then((json) => {
+        setData(json);
         setLoading(false);
-      } catch (error: any) {
-        setError(error.message);
+      })
+      .catch((err) => {
+        setError(err.message);
         setLoading(false);
-      }
-    };
-
-    fetchData();
+      });
   }, [url]);
 
   return { data, loading, error };
-};
+}
 
 export default useFetch;
