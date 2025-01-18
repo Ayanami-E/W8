@@ -26,7 +26,6 @@ const MyContainer: React.FC = () => {
   const [userItems, setUserItems] = useState<Item[]>([]);
   const [inputValue, setInputValue] = useState("");
 
-  // 在组件挂载时进行数据获取
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -76,15 +75,9 @@ const MyContainer: React.FC = () => {
   };
 
   return (
-    <div
-      className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg"
-      data-testid="mycon"
-    >
-      <h2 className="text-2xl font-bold text-center text-blue-600">
-        Welcome to MyContainer
-      </h2>
+    <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg" data-testid="mycon">
+      <h2 className="text-2xl font-bold text-center text-blue-600">Welcome to MyContainer</h2>
 
-      {/* 输入框和添加按钮 */}
       <div className="flex mt-4 space-x-2">
         <input
           type="text"
@@ -94,16 +87,11 @@ const MyContainer: React.FC = () => {
           className="border p-2 flex-grow"
           role="textbox"
         />
-        <button
-          onClick={handleAddItem}
-          className="bg-blue-500 text-white px-4 py-2"
-          role="button"
-        >
+        <button onClick={handleAddItem} className="bg-blue-500 text-white px-4 py-2" role="button">
           Add Item
         </button>
       </div>
 
-      {/* 根据加载状态或错误状态渲染内容 */}
       {loading ? (
         <p className="text-center text-gray-500">Loading data...</p>
       ) : error ? (
