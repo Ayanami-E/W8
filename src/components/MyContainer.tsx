@@ -26,8 +26,14 @@ const MyContainer: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(API_URL);
-        const data: TItem[] = await response.json();
-        setItems(data);
+        const data: any[] = await response.json();
+        // 将 API 返回的数据转换为 TItem 类型
+        const fetchedItems: TItem[] = data.slice(0, 2).map((todo) => ({
+          id: todo.id.toString(),
+          text: todo.title || "Untitled",
+          clicked: false,
+        }));
+        setItems(fetchedItems);
       } catch (err) {
         setError("Error fetching data");
       } finally {
