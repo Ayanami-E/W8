@@ -1,31 +1,55 @@
 // src/components/MyList.tsx
+import { Item } from './MyContainer';
+
 interface MyListProps {
   header?: string;
   items: Item[];
   updateList?: (id: string) => void;
   onDelete?: (id: string) => void;
-  onToggle?: (id: string) => void;  // 使所有props都是可选的
+  onToggle?: (id: string) => void;
 }
 
-function MyList({ header, items, updateList = () => {}, onToggle = () => {} }: MyListProps) {
+function MyList({ 
+  header, 
+  items, 
+  updateList = () => {}, 
+  onDelete = () => {}, 
+  onToggle = () => {} 
+}: MyListProps) {
   return (
     <div>
-      {header && <h3>{header}</h3>}
-      <ul className="mt-4">
-        {items.map((item) => (
-          <li
-            key={item.id}
-            role="listitem"
-            onClick={() => {
-              updateList(item.id);
-              onToggle(item.id);
-            }}
-            style={{ textDecoration: item.completed ? 'line-through' : '' }}
-          >
-            {item.text}
-          </li>
-        ))}
-      </ul>
+      {header && <h3 className="text-xl font-semibold mt-4">{header}</h3>}
+      {items.length === 0 ? (
+        <p className="text-gray-500">No items to display.</p>
+      ) : (
+        <ul className="mt-2">
+          {items.map(item => (
+            <li
+              key={item.id}
+              role="listitem"
+              onClick={() => {
+                updateList(item.id);
+                onToggle(item.id);
+              }}
+              style={{ textDecoration: item.completed ? 'line-through' : '' }}
+              className="flex items-center justify-between p-2 border-b"
+            >
+              <span>{item.text}</span>
+              {onDelete && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(item.id);
+                  }}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  Delete
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
