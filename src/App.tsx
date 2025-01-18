@@ -1,6 +1,4 @@
 // src/App.tsx
-
-import React from "react";
 import MyContainer from "./components/MyContainer";
 
 function App() {
