@@ -6,7 +6,7 @@ import MyList from './MyList';
 export interface Item {
  id: string;
  text: string;
- completed: boolean;
+ clicked: boolean;
 }
 
 function MyContainer() {
