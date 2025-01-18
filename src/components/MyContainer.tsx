@@ -14,7 +14,7 @@ function MyContainer() {
  const [inputValue, setInputValue] = useState('');
  // 待办项列表状态
  const [items, setItems] = useState<Item[]>([
-   { id: '1', text: 'Initial item', completed: false }
+   { id: '1', text: 'Initial item', clicked: false }
  ]);
 
  // 处理添加项目
@@ -23,7 +23,7 @@ function MyContainer() {
      setItems([...items, {
        id: Date.now().toString(),
        text: inputValue,
-       completed: false
+       clicked: false
      }]);
      setInputValue('');
    }
@@ -37,7 +37,7 @@ function MyContainer() {
  // 处理项目状态切换
  const toggleItem = (id: string) => {
    setItems(items.map(item => 
-     item.id === id ? { ...item, completed: !item.completed } : item
+     item.id === id ? { ...item, clicked: !item.clicked } : item
    ));
  };
 
