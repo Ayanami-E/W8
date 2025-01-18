@@ -1,4 +1,3 @@
-// src/components/MyList.tsx
 import { Item } from './MyContainer';
 
 interface MyListProps {
