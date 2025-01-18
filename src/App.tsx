@@ -1,5 +1,5 @@
+// src/App.tsx
 import MyContainer from "./components/MyContainer";
-
 
 function App() {
   return (
