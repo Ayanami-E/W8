@@ -4,7 +4,13 @@ export default {
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
-  reporters: ['default'],
+  reporters: [
+    'default',
+    ['jest-junit', {
+      outputDirectory: 'test-results',
+      outputName: 'junit.xml'
+    }]
+  ],
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',
