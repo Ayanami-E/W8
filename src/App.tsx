@@ -1,10 +1,12 @@
 // src/App.tsx
+
+import React from "react";
 import MyContainer from "./components/MyContainer";
 
 function App() {
   return (
     <div className="App">
-      <h1>Hello World!</h1>
+      <h1 className="text-3xl font-bold text-center my-4">Hello World!</h1>
       <MyContainer />
     </div>
   );
