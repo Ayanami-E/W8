@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 
 function MyContainer() {
   const [inputValue, setInputValue] = useState('');
