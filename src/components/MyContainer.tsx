@@ -1,7 +1,5 @@
-// src/components/MyContainer.tsx
 import { useState } from 'react';
 
-// 导出 Item 类型
 export interface Item {
   id: string;
   text: string;
@@ -11,15 +9,8 @@ export interface Item {
 function MyContainer() {
   const [inputValue, setInputValue] = useState('');
   const [items, setItems] = useState<Item[]>([
-    // 初始化一个列表项
     { id: '1', text: 'Initial item', completed: false }
   ]);
-
-  const toggleItem = (id: string) => {
-    setItems(items.map(item => 
-      item.id === id ? { ...item, completed: !item.completed } : item
-    ));
-  };
 
   const handleAddItem = () => {
     if (inputValue.trim()) {
@@ -30,6 +21,12 @@ function MyContainer() {
       }]);
       setInputValue('');
     }
+  };
+
+  const toggleItem = (id: string) => {
+    setItems(items.map(item => 
+      item.id === id ? { ...item, completed: !item.completed } : item
+    ));
   };
 
   return (
@@ -61,8 +58,8 @@ function MyContainer() {
             role="listitem"
             onClick={() => toggleItem(item.id)}
             style={{ 
-              textDecoration: item.completed ? 'line-through' : 'none',
-              cursor: 'pointer'
+              textDecoration: item.completed ? 'line-through' : '',
+              cursor: 'pointer' 
             }}
           >
             {item.text}
