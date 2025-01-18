@@ -1,21 +1,22 @@
-// src/components/MyList.tsx
-
 import React from "react";
-import { TItem } from "../types";
+import { Item } from "./MyContainer";
 
 interface MyListProps {
-  header: string;
-  items: TItem[];
+  header?: string;
+  items: Item[];
+  onDelete?: (id: string) => void;
   updateList: (id: string) => void;
-  onDelete?: (id: string) => void; // 可选的删除函数
 }
 
-const MyList: React.FC<MyListProps> = ({ header, items, updateList, onDelete }) => {
+const MyList: React.FC<MyListProps> = ({ header, items, onDelete, updateList }) => {
   return (
     <div>
-      <h3 className="text-lg font-semibold text-gray-700">{header}</h3>
+      {/* 如果有header，就展示 */}
+      {header && <h3 className="text-lg font-semibold text-gray-700">{header}</h3>}
+
       <ul className="list-disc pl-5">
         {items.length === 0 ? (
+          // 如果传进来的数组为空，就提示“暂无”而不是生成真实列表项
           <li role="listitem" className="text-gray-500">
             No items available
           </li>
@@ -23,24 +24,24 @@ const MyList: React.FC<MyListProps> = ({ header, items, updateList, onDelete }) 
           items.map((item) => (
             <li
               key={item.id}
-              role="listitem"
               className="flex justify-between p-2 border rounded-lg cursor-pointer"
-              style={{ textDecoration: item.clicked ? "line-through" : "none" }}
+              role="listitem"
+              style={{
+                textDecoration: item.clicked ? "line-through" : "none",
+              }}
               onClick={() => updateList(item.id)}
             >
               {item.text}
-              {onDelete && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation(); // 防止触发父级的点击事件
-                    onDelete(item.id);
-                  }}
-                  className="text-red-500 hover:text-red-700"
-                  role="button"
-                >
-                  ❌
-                </button>
-              )}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete?.(item.id);
+                }}
+                className="text-red-500 hover:text-red-700"
+                role="button"
+              >
+                ❌
+              </button>
             </li>
           ))
         )}
