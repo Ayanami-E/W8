@@ -1,3 +1,5 @@
+// src/components/MyList.tsx
+
 import React from "react";
 import { Item } from "./MyContainer";
 
@@ -11,10 +13,12 @@ interface MyListProps {
 const MyList: React.FC<MyListProps> = ({ header, items, onDelete, updateList }) => {
   return (
     <div>
+      {/* 如果有 header，则显示 */}
       {header && <h3 className="text-lg font-semibold text-gray-700">{header}</h3>}
 
       <ul className="list-disc pl-5">
         {items.length === 0 ? (
+          // 当没有任何项时，显示提示信息
           <li role="listitem" className="text-gray-500">
             No items available
           </li>
