@@ -23,8 +23,8 @@ const MyContainer: React.FC = () => {
         }))
       );
     } else {
-      // ✅ 确保 `items` 至少有一个默认数据
-      setItems([{ id: "1", text: "Default Item", clicked: false }]);
+      // ✅ 确保 `items` 至少有一个默认数据，避免 `listitem` 为空
+      setItems([{ id: "1", text: "Some other epic text to write", clicked: false }]);
     }
   }, [fetchedData]);
 
