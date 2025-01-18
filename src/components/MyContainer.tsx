@@ -1,22 +1,22 @@
 // src/components/MyContainer.tsx
+
 import React, { useState, useEffect } from "react";
 import MyList from "./MyList";
 
 const API_URL = "https://jsonplaceholder.typicode.com/todos";
 
-// Item类型，以及后台返回的数据类型
+// 定义 Item 类型以及从后台返回的数据类型
 export type Item = { id: string; text: string; clicked: boolean };
 type FetchedItem = { id: number; title: string };
 
-// 在测试环境中强制 Mock fetch
+// 在测试环境中模拟 fetch 请求
 if (process.env.NODE_ENV === "test") {
-  global.fetch = jest.fn().mockImplementation(() =>
+  global.fetch = async () =>
     Promise.resolve({
-      json: () => Promise.resolve([
+      json: async () => [
         { id: 1, title: "Fetched text from server" },
-      ]),
-    })
-  ) as any;
+      ],
+    }) as any;
 }
 
 const MyContainer: React.FC = () => {
@@ -27,13 +27,13 @@ const MyContainer: React.FC = () => {
   const [userItems, setUserItems] = useState<Item[]>([]);
   const [inputValue, setInputValue] = useState("");
 
-  // 一挂载就去 fetch
+  // 组件挂载时执行数据获取
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(API_URL);
         const data: FetchedItem[] = await response.json();
-        // 拿到数据后，存进 state
+        // 将获取到的数据存入 state
         setFetchedData(data);
       } catch (err) {
         setError("Error fetching data");
@@ -44,14 +44,14 @@ const MyContainer: React.FC = () => {
     fetchData();
   }, []);
 
-  // 如果fetch到了数据，就用 map 转成 { id, text, clicked }；否则空数组
+  // 将获取到的数据转换为 Item 类型
   const items: Item[] = fetchedData.map((todo) => ({
     id: todo.id.toString(),
     text: todo.title || "Untitled",
     clicked: false,
   }));
 
-  // 删除 userItems 里的某一项
+  // 删除用户添加的某一项
   const handleDeleteItem = (id: string) => {
     setUserItems((prev) => prev.filter((item) => item.id !== id));
   };
@@ -104,7 +104,7 @@ const MyContainer: React.FC = () => {
         </button>
       </div>
 
-      {/* 根据loading/error状态 或者 正常列表进行渲染 */}
+      {/* 根据 loading/error 状态 或 正常列表进行渲染 */}
       {loading ? (
         <p className="text-center text-gray-500">Loading data...</p>
       ) : error ? (
