@@ -36,17 +36,15 @@ function MyList({
             >
               <span>{item.text}</span>
               {onDelete && (
-  <button
-  onClick={(e) => {
-    e.stopPropagation();
-    onDelete(item.id);
-  }}
-  className="text-red-500 hover:text-red-700"
-  type="submit"  // 改变类型
-  name="delete"  // 添加这个
->
-  Delete
-</button>
+  <span  // 改用 span 代替 button
+    onClick={(e) => {
+      e.stopPropagation();
+      onDelete(item.id);
+    }}
+    className="text-red-500 hover:text-red-700 cursor-pointer"  // 添加 cursor-pointer
+  >
+    Delete
+  </span>
 )}
             </li>
           ))}
