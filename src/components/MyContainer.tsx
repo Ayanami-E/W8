@@ -1,4 +1,4 @@
-// src/components/MyContainer.tsx
+
 import { useState } from 'react';
 import MyList from './MyList';
 
