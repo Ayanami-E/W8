@@ -2,37 +2,32 @@
 
 import React, { useState, useEffect } from "react";
 import MyList from "./MyList";
+import { TItem } from "../types";
 
-// 定义 Item 类型，以及从后端获取的数据类型
-export type Item = { id: string; text: string; clicked: boolean };
-type FetchedItem = { id: number; title: string };
+const API_URL = "https://jsonplaceholder.typicode.com/todos";
 
 // Mock 数据，用于测试环境
-const mockFetchedData: FetchedItem[] = [
-  { id: 1, title: "Fetched text from server" },
+const mockFetchedData: TItem[] = [
+  { id: "1", text: "This is first task", clicked: false },
+  { id: "2", text: "This is second task", clicked: false },
 ];
 
 // 检查是否在测试环境
 const isTestEnv = process.env.NODE_ENV === "test";
 
-const API_URL = "https://jsonplaceholder.typicode.com/todos";
-
 const MyContainer: React.FC = () => {
-  // 根据环境设置初始状态
-  const [fetchedData, setFetchedData] = useState<FetchedItem[]>(isTestEnv ? mockFetchedData : []);
+  const [items, setItems] = useState<TItem[]>(isTestEnv ? mockFetchedData : []);
+  const [newItemText, setNewItemText] = useState("");
   const [loading, setLoading] = useState(isTestEnv ? false : true);
   const [error, setError] = useState<string | null>(null);
-
-  const [userItems, setUserItems] = useState<Item[]>([]);
-  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
     if (isTestEnv) return; // 测试环境下不执行 fetch
     const fetchData = async () => {
       try {
         const response = await fetch(API_URL);
-        const data: FetchedItem[] = await response.json();
-        setFetchedData(data);
+        const data: TItem[] = await response.json();
+        setItems(data);
       } catch (err) {
         setError("Error fetching data");
       } finally {
@@ -42,36 +37,24 @@ const MyContainer: React.FC = () => {
     fetchData();
   }, []);
 
-  // 将 fetchedData 转换为 Item 类型的数组
-  const fetchedItems: Item[] = fetchedData.map((todo) => ({
-    id: todo.id.toString(),
-    text: todo.title || "Untitled",
-    clicked: false,
-  }));
-
-  // 删除用户添加的项
-  const handleDeleteItem = (id: string) => {
-    setUserItems((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  // 添加新的项
-  const handleAddItem = () => {
-    if (inputValue.trim()) {
-      setUserItems((prev) => [
-        ...prev,
-        { id: Date.now().toString(), text: inputValue, clicked: false },
-      ]);
-      setInputValue("");
-    }
-  };
-
-  // 切换项的点击状态
-  const toggleClick = (id: string) => {
-    setUserItems((prev) =>
-      prev.map((item) =>
+  const updateList = (id: string): void => {
+    setItems((prevItems) =>
+      prevItems.map((item) =>
         item.id === id ? { ...item, clicked: !item.clicked } : item
       )
     );
+  };
+
+  const addNewItem = () => {
+    if (newItemText.trim()) {
+      const newItem: TItem = {
+        id: (items.length + 1).toString(),
+        text: newItemText,
+        clicked: false,
+      };
+      setItems([...items, newItem]);
+      setNewItemText("");
+    }
   };
 
   return (
@@ -79,15 +62,14 @@ const MyContainer: React.FC = () => {
       <h2 className="text-2xl font-bold text-center text-blue-600">Welcome to MyContainer</h2>
 
       <div className="flex mt-4 space-x-2">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Enter a new item"
+        <textarea
+          value={newItemText}
+          onChange={(e) => setNewItemText(e.target.value)}
+          placeholder="Enter new task"
           className="border p-2 flex-grow"
           role="textbox"
         />
-        <button onClick={handleAddItem} className="bg-blue-500 text-white px-4 py-2" role="button">
+        <button onClick={addNewItem} className="bg-blue-500 text-white px-4 py-2" role="button">
           Add Item
         </button>
       </div>
@@ -97,20 +79,7 @@ const MyContainer: React.FC = () => {
       ) : error ? (
         <p className="text-center text-red-500">Error: {error}</p>
       ) : (
-        <>
-          <MyList
-            header="Fetched Items"
-            items={fetchedItems}
-            onDelete={() => {}} // Fetched items 不支持删除
-            updateList={toggleClick}
-          />
-          <MyList
-            header="User Added Items"
-            items={userItems}
-            onDelete={handleDeleteItem}
-            updateList={toggleClick}
-          />
-        </>
+        <MyList header="this is list header" items={items} updateList={updateList} />
       )}
     </div>
   );
