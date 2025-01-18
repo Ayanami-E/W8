@@ -36,7 +36,7 @@ function MyList({
             >
               <span>{item.text}</span>
               {onDelete && (
-  <span  // 改用 span 代替 button
+  <span  
     onClick={(e) => {
       e.stopPropagation();
       onDelete(item.id);
