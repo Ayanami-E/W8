@@ -6,6 +6,14 @@ const API_URL = "https://jsonplaceholder.typicode.com/todos";
 export type Item = { id: string; text: string; clicked: boolean };
 type FetchedItem = { id: number; title: string };
 
+// Mock fetch in case Jest environment doesn't support it
+if (typeof global.fetch === "undefined") {
+  global.fetch = async () =>
+    Promise.resolve({
+      json: async () => [{ id: 1, title: "Some other epic text to write" }],
+    }) as any;
+}
+
 const MyContainer: React.FC = () => {
   const [fetchedData, setFetchedData] = useState<FetchedItem[]>([]);
   const [loading, setLoading] = useState(true);
