@@ -1,11 +1,33 @@
-import { useState } from 'react';  // 确保正确导入 useState
+// src/components/MyContainer.tsx
+import { useState } from 'react';
+
+// 导出 Item 类型
+export interface Item {
+  id: string;
+  text: string;
+  completed: boolean;
+}
+
 function MyContainer() {
   const [inputValue, setInputValue] = useState('');
-  const [items, setItems] = useState<string[]>([]);
+  const [items, setItems] = useState<Item[]>([
+    // 初始化一个列表项
+    { id: '1', text: 'Initial item', completed: false }
+  ]);
+
+  const toggleItem = (id: string) => {
+    setItems(items.map(item => 
+      item.id === id ? { ...item, completed: !item.completed } : item
+    ));
+  };
 
   const handleAddItem = () => {
     if (inputValue.trim()) {
-      setItems([...items, inputValue]);
+      setItems([...items, {
+        id: Date.now().toString(),
+        text: inputValue,
+        completed: false
+      }]);
       setInputValue('');
     }
   };
@@ -33,17 +55,17 @@ function MyContainer() {
         </button>
       </div>
       <ul className="mt-4">
-        {items.map((item, index) => (
+        {items.map((item) => (
           <li
-            key={index}
-            onClick={() => {
-              const newItems = [...items];
-              newItems[index] = `${item} (clicked)`;
-              setItems(newItems);
+            key={item.id}
+            role="listitem"
+            onClick={() => toggleItem(item.id)}
+            style={{ 
+              textDecoration: item.completed ? 'line-through' : 'none',
+              cursor: 'pointer'
             }}
-            style={{ cursor: 'pointer' }}
           >
-            {item}
+            {item.text}
           </li>
         ))}
       </ul>
