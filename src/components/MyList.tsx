@@ -6,7 +6,7 @@ import { Item } from './MyContainer';
 type MyListProps = {
   header: string;
   items: Item[];
-  onDelete?: (id: string) => void; // 可选属性
+  onDelete?: (id: string) => void; // 将 onDelete 设为可选
   updateList: (id: string) => void;
 };
 
