@@ -1,24 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MyList from "./MyList";
 import useFetch from "../hooks/useFetch";
 
 const API_URL = "https://jsonplaceholder.typicode.com/todos";
 
-export type Item = { id: string; text: string; clicked: boolean }; // ✅ 让 Item 可被导出
+// ✅ 让 Jest 运行时不会报 fetch 错误
+if (typeof fetch === "undefined") {
+  global.fetch = require("node-fetch");
+}
+
+export type Item = { id: string; text: string; clicked: boolean };
 type FetchedItem = { id: number; title: string };
 
 const MyContainer: React.FC = () => {
   const { data: fetchedData, loading, error } = useFetch<FetchedItem[]>(API_URL);
   const [userItems, setUserItems] = useState<Item[]>([]);
   const [inputValue, setInputValue] = useState("");
+  const [items, setItems] = useState<Item[]>([]);
 
-  const items: Item[] = Array.isArray(fetchedData)
-    ? fetchedData.map((item) => ({
-        id: item.id.toString(),
-        text: item.title || "Untitled",
-        clicked: false,
-      }))
-    : [];
+  useEffect(() => {
+    if (Array.isArray(fetchedData)) {
+      setItems(
+        fetchedData.map((item) => ({
+          id: item.id.toString(),
+          text: item.title || "Untitled",
+          clicked: false,
+        }))
+      );
+    }
+  }, [fetchedData]);
 
   const handleDeleteItem = (id: string) => {
     setUserItems((prev) => prev.filter((item) => item.id !== id));
@@ -64,11 +74,8 @@ const MyContainer: React.FC = () => {
         <p className="text-center text-red-500">Error: {error}</p>
       ) : (
         <>
-          <h3 className="text-lg font-semibold mt-4 text-gray-700">Fetched Items</h3>
-          <MyList items={items} onDelete={() => {}} updateList={toggleClick} />
-
-          <h3 className="text-lg font-semibold mt-4 text-gray-700">User Added Items</h3>
-          <MyList items={userItems} onDelete={handleDeleteItem} updateList={toggleClick} />
+          <MyList header="Fetched Items" items={items} onDelete={() => {}} updateList={toggleClick} />
+          <MyList header="User Added Items" items={userItems} onDelete={handleDeleteItem} updateList={toggleClick} />
         </>
       )}
     </div>
