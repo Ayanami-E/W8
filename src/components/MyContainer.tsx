@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import MyList from './MyList';
 
-// 导出 Item 接口供其他组件使用
 export interface Item {
  id: string;
  text: string;
@@ -10,14 +9,11 @@ export interface Item {
 }
 
 function MyContainer() {
- // 输入框状态
  const [inputValue, setInputValue] = useState('');
- // 待办项列表状态
  const [items, setItems] = useState<Item[]>([
    { id: '1', text: 'Initial item', clicked: false }
  ]);
 
- // 处理添加项目
  const handleAddItem = () => {
    if (inputValue.trim()) {
      setItems([...items, {
@@ -29,12 +25,10 @@ function MyContainer() {
    }
  };
 
- // 处理删除项目
  const handleDeleteItem = (id: string) => {
    setItems(prev => prev.filter(item => item.id !== id));
  };
 
- // 处理项目状态切换
  const toggleItem = (id: string) => {
    setItems(items.map(item => 
      item.id === id ? { ...item, clicked: !item.clicked } : item
@@ -58,9 +52,9 @@ function MyContainer() {
        <button
   onClick={handleAddItem}
   className="bg-blue-500 text-white px-4 py-2"
-  data-testid="add-button"  // 保留这个
+  data-testid="add-button"  
   type="button"
-  name="add"  // 添加这个
+  name="add"  
 >
   Add Item
 </button>
