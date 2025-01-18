@@ -1,6 +1,5 @@
 // src/components/MyList.tsx
 
-import React from 'react';
 import { Item } from './MyContainer';
 
 type MyListProps = {
