@@ -1,5 +1,5 @@
 import React from "react";
-import { Item } from "./MyContainer"; // ✅ 确保正确导入 Item
+import { Item } from "./MyContainer"; // ✅ 现在 MyContainer.tsx 里已正确导出 Item
 
 interface MyListProps {
   items: Item[];
