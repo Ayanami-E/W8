@@ -31,7 +31,7 @@ function MyList({
                 updateList(item.id);
                 onToggle(item.id);
               }}
-              style={{ textDecoration: item.completed ? 'line-through' : '' }}
+              style={{ textDecoration: item.clicked ? 'line-through' : '' }}
               className="flex items-center justify-between p-2 border-b"
             >
               <span>{item.text}</span>
