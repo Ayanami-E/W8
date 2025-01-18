@@ -9,16 +9,6 @@ const API_URL = "https://jsonplaceholder.typicode.com/todos";
 export type Item = { id: string; text: string; clicked: boolean };
 type FetchedItem = { id: number; title: string };
 
-// 在测试环境中模拟 fetch 请求
-if (process.env.NODE_ENV === "test") {
-  global.fetch = async () =>
-    Promise.resolve({
-      json: async () => [
-        { id: 1, title: "Fetched text from server" },
-      ],
-    }) as any;
-}
-
 const MyContainer: React.FC = () => {
   const [fetchedData, setFetchedData] = useState<FetchedItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -114,7 +104,7 @@ const MyContainer: React.FC = () => {
           <MyList
             header="Fetched Items"
             items={items}
-            onDelete={() => {}} // 如果需要处理删除，可以实现此函数
+            onDelete={() => {}} // 提供一个空函数，防止在测试中报错
             updateList={toggleClick}
           />
           <MyList
