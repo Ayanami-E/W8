@@ -4,8 +4,6 @@ import useFetch from "../hooks/useFetch";
 
 const API_URL = "https://jsonplaceholder.typicode.com/todos";
 
-
-
 export type Item = { id: string; text: string; clicked: boolean };
 type FetchedItem = { id: number; title: string };
 
@@ -16,7 +14,7 @@ const MyContainer: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
-    if (Array.isArray(fetchedData)) {
+    if (Array.isArray(fetchedData) && fetchedData.length > 0) {
       setItems(
         fetchedData.map((item) => ({
           id: item.id.toString(),
@@ -24,6 +22,9 @@ const MyContainer: React.FC = () => {
           clicked: false,
         }))
       );
+    } else {
+      // ✅ 确保 `items` 至少有一个默认数据
+      setItems([{ id: "1", text: "Default Item", clicked: false }]);
     }
   }, [fetchedData]);
 
