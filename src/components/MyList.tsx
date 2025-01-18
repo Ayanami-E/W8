@@ -14,7 +14,9 @@ const MyList: React.FC<MyListProps> = ({ header, items, onDelete, updateList }) 
       {header && <h3 className="text-lg font-semibold text-gray-700">{header}</h3>}
       <ul className="list-disc pl-5">
         {items.length === 0 ? (
-          <li role="listitem" className="text-gray-500">No items available</li>
+          <li role="listitem" className="text-gray-500">
+            No items available
+          </li>
         ) : (
           items.map((item) => (
             <li
