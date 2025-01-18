@@ -4,7 +4,7 @@ import useFetch from "../hooks/useFetch";
 
 const API_URL = "https://jsonplaceholder.typicode.com/todos";
 
-type Item = { id: string; text: string; clicked: boolean };
+export type Item = { id: string; text: string; clicked: boolean }; // ✅ 让 Item 可被导出
 type FetchedItem = { id: number; title: string };
 
 const MyContainer: React.FC = () => {
