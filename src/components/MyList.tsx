@@ -1,27 +1,32 @@
-import { Item } from './MyContainer';
-
+// src/components/MyList.tsx
 interface MyListProps {
+  header?: string;
   items: Item[];
-  onToggle: (id: string) => void;
+  updateList?: (id: string) => void;
+  onDelete?: (id: string) => void;
+  onToggle?: (id: string) => void;  // 使所有props都是可选的
 }
 
-function MyList({ items, onToggle }: MyListProps) {
+function MyList({ header, items, updateList = () => {}, onToggle = () => {} }: MyListProps) {
   return (
-    <ul className="mt-4">
-      {items.map((item) => (
-        <li
-          key={item.id}
-          role="listitem"
-          onClick={() => onToggle(item.id)}
-          style={{ 
-            textDecoration: item.completed ? 'line-through' : 'none',
-            cursor: 'pointer'
-          }}
-        >
-          {item.text}
-        </li>
-      ))}
-    </ul>
+    <div>
+      {header && <h3>{header}</h3>}
+      <ul className="mt-4">
+        {items.map((item) => (
+          <li
+            key={item.id}
+            role="listitem"
+            onClick={() => {
+              updateList(item.id);
+              onToggle(item.id);
+            }}
+            style={{ textDecoration: item.completed ? 'line-through' : '' }}
+          >
+            {item.text}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
