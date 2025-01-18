@@ -56,12 +56,13 @@ function MyContainer() {
          role="textbox"
        />
        <button
-         onClick={handleAddItem}
-         className="bg-blue-500 text-white px-4 py-2"
-         role="button"
-       >
-         Add Item
-       </button>
+  onClick={handleAddItem}
+  className="bg-blue-500 text-white px-4 py-2"
+  role="button"
+  data-testid="add-button"  // 添加测试 ID
+>
+  Add Item
+</button>
      </div>
      <MyList 
        items={items}
