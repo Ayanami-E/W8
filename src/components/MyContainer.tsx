@@ -114,7 +114,7 @@ const MyContainer: React.FC = () => {
           <MyList
             header="Fetched Items"
             items={items}
-            onDelete={() => {}}
+            onDelete={() => {}} // 如果需要处理删除，可以实现此函数
             updateList={toggleClick}
           />
           <MyList
