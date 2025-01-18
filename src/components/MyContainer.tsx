@@ -4,10 +4,7 @@ import useFetch from "../hooks/useFetch";
 
 const API_URL = "https://jsonplaceholder.typicode.com/todos";
 
-// ✅ 让 Jest 运行时不会报 fetch 错误
-if (typeof fetch === "undefined") {
-  global.fetch = require("node-fetch");
-}
+
 
 export type Item = { id: string; text: string; clicked: boolean };
 type FetchedItem = { id: number; title: string };
