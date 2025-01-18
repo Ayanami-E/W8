@@ -1,5 +1,6 @@
 import React from "react";
-import MyContainer from "./MyContainer";
+import MyContainer from "./components/MyContainer";
+
 
 function App() {
   return (
