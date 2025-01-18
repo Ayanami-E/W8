@@ -6,11 +6,11 @@ import { Item } from './MyContainer';
 type MyListProps = {
   header: string;
   items: Item[];
-  onDelete: (id: string) => void;
+  onDelete?: (id: string) => void; // 可选属性
   updateList: (id: string) => void;
 };
 
-const MyList: React.FC<MyListProps> = ({ header, items, onDelete, updateList }) => {
+const MyList: React.FC<MyListProps> = ({ header, items, onDelete = () => {}, updateList }) => {
   return (
     <div>
       <h3 className="text-xl font-semibold mt-4">{header}</h3>
