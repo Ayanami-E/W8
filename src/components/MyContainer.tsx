@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import MyList from "./MyList";
-import useFetch from "../hooks/useFetch";
 
 const API_URL = "https://jsonplaceholder.typicode.com/todos";
 
@@ -8,25 +7,36 @@ export type Item = { id: string; text: string; clicked: boolean };
 type FetchedItem = { id: number; title: string };
 
 const MyContainer: React.FC = () => {
-  const { data: fetchedData, loading, error } = useFetch<FetchedItem[]>(API_URL);
+  const [fetchedData, setFetchedData] = useState<FetchedItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [userItems, setUserItems] = useState<Item[]>([]);
   const [inputValue, setInputValue] = useState("");
-  const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
-    if (Array.isArray(fetchedData) && fetchedData.length > 0) {
-      setItems(
-        fetchedData.map((item) => ({
+    const fetchData = async () => {
+      try {
+        const response = await fetch(API_URL);
+        const data: FetchedItem[] = await response.json();
+        setFetchedData(data);
+      } catch (err) {
+        setError("Error fetching data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const items: Item[] =
+    fetchedData.length > 0
+      ? fetchedData.map((item) => ({
           id: item.id.toString(),
           text: item.title || "Untitled",
           clicked: false,
         }))
-      );
-    } else {
-      // ✅ 确保 `items` 至少有一个默认数据，避免 `listitem` 为空
-      setItems([{ id: "1", text: "Some other epic text to write", clicked: false }]);
-    }
-  }, [fetchedData]);
+      : [{ id: "1", text: "Some other epic text to write", clicked: false }];
 
   const handleDeleteItem = (id: string) => {
     setUserItems((prev) => prev.filter((item) => item.id !== id));
