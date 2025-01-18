@@ -4,7 +4,6 @@ import useFetch from "../hooks/useFetch";
 
 const API_URL = "https://jsonplaceholder.typicode.com/todos";
 
-// ✅ 定义数据结构，确保 fetchedData 结构正确
 type Item = { id: string; text: string; clicked: boolean };
 type FetchedItem = { id: number; title: string };
 
@@ -13,12 +12,11 @@ const MyContainer: React.FC = () => {
   const [userItems, setUserItems] = useState<Item[]>([]);
   const [inputValue, setInputValue] = useState("");
 
-  // ✅ 确保 fetchedData 结构正确
   const items: Item[] = Array.isArray(fetchedData)
     ? fetchedData.map((item) => ({
         id: item.id.toString(),
         text: item.title || "Untitled",
-        clicked: false, // ✅ Task 5: 默认不加删除线
+        clicked: false,
       }))
     : [];
 
@@ -36,7 +34,6 @@ const MyContainer: React.FC = () => {
     }
   };
 
-  // ✅ Task 5: 点击后修改 `clicked` 状态，添加删除线
   const toggleClick = (id: string) => {
     setUserItems((prev) =>
       prev.map((item) => (item.id === id ? { ...item, clicked: !item.clicked } : item))
@@ -44,10 +41,9 @@ const MyContainer: React.FC = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg" data-testid="mycon">
       <h2 className="text-2xl font-bold text-center text-blue-600">Welcome to MyContainer</h2>
 
-      {/* ✅ Task 4: 添加输入框和按钮 */}
       <div className="flex mt-4 space-x-2">
         <input
           type="text"
