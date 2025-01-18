@@ -1,3 +1,4 @@
+// src/components/MyContainer.tsx
 import React, { useState, useEffect } from "react";
 import MyList from "./MyList";
 
@@ -7,15 +8,15 @@ const API_URL = "https://jsonplaceholder.typicode.com/todos";
 export type Item = { id: string; text: string; clicked: boolean };
 type FetchedItem = { id: number; title: string };
 
-// 如果 Jest 环境没有 fetch，就 mock 一份
-if (typeof global.fetch === "undefined") {
-  global.fetch = async () =>
+// 在测试环境中强制 Mock fetch
+if (process.env.NODE_ENV === "test") {
+  global.fetch = jest.fn().mockImplementation(() =>
     Promise.resolve({
-      json: async () => [
-        // 这里改成别的字符串，避免和你测试里输入的 “Some other epic text to write” 冲突
+      json: () => Promise.resolve([
         { id: 1, title: "Fetched text from server" },
-      ],
-    }) as any;
+      ]),
+    })
+  ) as any;
 }
 
 const MyContainer: React.FC = () => {
