@@ -1,4 +1,5 @@
 // src/components/MyList.tsx
+
 import React from 'react';
 import { Item } from './MyContainer';
 
@@ -17,14 +18,12 @@ const MyList: React.FC<MyListProps> = ({ header, items, onDelete, updateList }) 
         {items.map((item) => (
           <li key={item.id}>
             <span
-              style={{ textDecoration: item.clicked ? 'line-through' : 'none', cursor: 'pointer' }}
+              style={{ textDecoration: item.clicked ? 'line-through' : 'none' }}
               onClick={() => updateList(item.id)}
             >
               {item.text}
             </span>
-            <button onClick={() => onDelete(item.id)} style={{ marginLeft: '10px' }}>
-              Delete
-            </button>
+            <button onClick={() => onDelete(item.id)}>Delete</button>
           </li>
         ))}
       </ul>
