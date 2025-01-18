@@ -1,22 +1,37 @@
+// src/components/MyContainer.tsx
+
 import React, { useState, useEffect } from "react";
 import MyList from "./MyList";
 
-const API_URL = "https://jsonplaceholder.typicode.com/todos";
-
-// 定义 Item 类型，以及从后端获取的数据类型
+// 定义类型
 export type Item = { id: string; text: string; clicked: boolean };
 type FetchedItem = { id: number; title: string };
 
-// 如果 Jest 环境没有 fetch，就 mock 一份
-if (typeof global.fetch === "undefined") {
-  global.fetch = async () =>
-    Promise.resolve({
-      json: async () => [
-        // 修改返回的 title，避免与测试中输入的文本重复
-        { id: 1, title: "Fetched text from server" },
-      ],
-    }) as any;
+// Mock fetch to return predictable data
+const mockFetchedData: FetchedItem[] = [
+  { id: 1, title: "Fetched text from server" },
+];
+
+// 仅在测试环境下 Mock fetch
+if (process.env.NODE_ENV === "test") {
+  // 检查是否已经有 fetch 被 Mock，避免重复赋值
+  if (!global.fetch) {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(mockFetchedData),
+      })
+    ) as jest.Mock;
+  } else {
+    // 如果已经有 Mock，覆盖它
+    (global.fetch as jest.Mock).mockImplementation(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(mockFetchedData),
+      })
+    );
+  }
 }
+
+const API_URL = "https://jsonplaceholder.typicode.com/todos";
 
 const MyContainer: React.FC = () => {
   const [fetchedData, setFetchedData] = useState<FetchedItem[]>([]);
@@ -31,7 +46,6 @@ const MyContainer: React.FC = () => {
       try {
         const response = await fetch(API_URL);
         const data: FetchedItem[] = await response.json();
-        // 将获取到的数据存入 state
         setFetchedData(data);
       } catch (err) {
         setError("Error fetching data");
@@ -42,19 +56,16 @@ const MyContainer: React.FC = () => {
     fetchData();
   }, []);
 
-  // 将 fetchedData 转换为 Item 类型的数组
   const fetchedItems: Item[] = fetchedData.map((todo) => ({
     id: todo.id.toString(),
     text: todo.title || "Untitled",
     clicked: false,
   }));
 
-  // 删除用户添加的项
   const handleDeleteItem = (id: string) => {
     setUserItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  // 添加新的项
   const handleAddItem = () => {
     if (inputValue.trim()) {
       setUserItems((prev) => [
@@ -65,7 +76,6 @@ const MyContainer: React.FC = () => {
     }
   };
 
-  // 切换项的点击状态
   const toggleClick = (id: string) => {
     setUserItems((prev) =>
       prev.map((item) =>
