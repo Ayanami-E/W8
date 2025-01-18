@@ -37,16 +37,16 @@ function MyList({
               <span>{item.text}</span>
               {onDelete && (
   <button
-    type="button"  // 添加类型
-    onClick={(e) => {
-      e.stopPropagation();
-      onDelete(item.id);
-    }}
-    className="text-red-500 hover:text-red-700"
-    aria-label="delete"  // 添加这行
-  >
-    Delete
-  </button>
+  onClick={(e) => {
+    e.stopPropagation();
+    onDelete(item.id);
+  }}
+  className="text-red-500 hover:text-red-700"
+  type="submit"  // 改变类型
+  name="delete"  // 添加这个
+>
+  Delete
+</button>
 )}
             </li>
           ))}
