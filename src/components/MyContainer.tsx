@@ -58,8 +58,9 @@ function MyContainer() {
        <button
   onClick={handleAddItem}
   className="bg-blue-500 text-white px-4 py-2"
-  data-testid="add-button"
-  aria-label="add item"  // 添加这行
+  data-testid="add-button"  // 保留这个
+  type="button"
+  name="add"  // 添加这个
 >
   Add Item
 </button>
