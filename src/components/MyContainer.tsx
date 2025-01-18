@@ -37,14 +37,12 @@ const MyContainer: React.FC = () => {
     fetchData();
   }, []);
 
-  const items: Item[] =
-    fetchedData.length > 0
-      ? fetchedData.map((item) => ({
-          id: item.id.toString(),
-          text: item.title || "Untitled",
-          clicked: false,
-        }))
-      : [{ id: "1", text: "Some other epic text to write", clicked: false }];
+  // 只用 fetchedData.map(...) ，不在这里插入“Some other epic text to write”
+  const items: Item[] = fetchedData.map((item) => ({
+    id: item.id.toString(),
+    text: item.title || "Untitled",
+    clicked: false,
+  }));
 
   const handleDeleteItem = (id: string) => {
     setUserItems((prev) => prev.filter((item) => item.id !== id));
